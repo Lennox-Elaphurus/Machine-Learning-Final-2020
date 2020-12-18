@@ -25,9 +25,11 @@ def pickleDump(variable,filename):
 
 
 def importTag(filename):
-    tag=np.loadtxt(fname="rawData/"+filename+".txt",dtype=str,delimiter='\t',comments='\n', usecols=(1,3,4,5),encoding='utf-8')
+    tag=np.loadtxt(fname="rawData/"+filename+".txt",dtype=int,delimiter='\t',comments='\n', usecols=(3,4,5),encoding='utf-8')
     print(tag)
-    pickleDump(tag,filename+"-tag")
+    # pickleDump(tag,filename+"-tag")
+    np.savetxt(os.getcwd()+"/midData/"+filename+"-tag.txt",tag)
+
 
 
 def importDoc(filename):
@@ -119,7 +121,7 @@ def inferFromModel2(testSet,filename):
 # main weibo_train_data
 # importTag("test")
 # importDoc("test")
-# importTag("weibo_train_data")
+importTag("weibo_train_data")
 # importDoc("weibo_train_data")
 
 # importDoc2("weibo_predict_data")
@@ -139,6 +141,6 @@ def inferFromModel2(testSet,filename):
 
 
 # inferFromModel(trainSet ,"weibo_train_data")
-testSet=pickleLoad("weibo_predict_data-testSet")
-inferFromModel2(testSet ,"weibo_predict_data")
+# testSet=pickleLoad("weibo_predict_data-testSet")
+# inferFromModel2(testSet ,"weibo_predict_data")
 
