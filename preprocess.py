@@ -34,9 +34,23 @@ def importDoc(filename):
     print(doc)
     pickleDump(doc,filename+"-doc")
 
+def cut_sentence(data):
+    stopList=[line[:-1] for line in open("中文停用词表.txt",'r',encoding='utf-8')]
+    result=[]
+    for i in range(data.shape[0]):
+        doc=jieba.cut(data[i][1])
+        doc=" ".join(doc).split()
+        doc=[word for word in doc if word not in stopList]
+        print(doc)
+        data[i][1]=list(doc)
+
 
 #############
 # main weibo_train_data
 
 # importTag("weibo_train_data")
 # importDoc("weibo_train_data")
+
+data=pickleLoad("test-doc")
+cut_sentence(data)
+print(data)
