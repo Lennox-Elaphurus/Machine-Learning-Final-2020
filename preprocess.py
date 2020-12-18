@@ -5,6 +5,7 @@ import gensim
 import jieba
 from gensim.models.doc2vec import Doc2Vec
 from gensim.models.doc2vec import TaggedDocument
+from gensim.test.utils import get_tmpfile
 
 # load from pickle file
 def pickleLoad(filename):
@@ -49,14 +50,30 @@ def cut_sentence(data,filename):
 
 def getTrainSet(data,filename):
     data=np.array(data,dtype=object)
-    TD=TaggedDocument(data[:,1],tags=data[:,0])
-    print(TD)
+    TD=[]
+    for i in range(data.shape[0]):
+        TD.append(TaggedDocument(data[i][1],tags=data[i][0]))
+    # print(TD)
     pickleDump(TD,filename+"-trainSet")
-
+    pickleDump(data,filename+"-trainSet-ndarray")
 
 def Doc2VecTrain(data,filename):
+    # print(data)
     model=Doc2Vec(documents=data)
-    model.train(data)
+    model.train(data,total_examples=model.corpus_count,epochs=model.epochs)
+    # print(model)
+    fname = get_tmpfile(os.getcwd()+"/midData/"+filename+"-doc2vec.model")
+    model.save(fname)
+
+      # you can continue training with the loaded model!
+
+def inferFromModel(inferSet,filename):
+    fname = get_tmpfile(os.getcwd()+"/midData/"+filename+"-doc2vec.model")
+    model = Doc2Vec.load(fname)
+    # dataV = model.infer_vector(data[:,1])
+    dataVec = [model.docvecs[z.tags[0]] for z in inferSet]
+    print(len(dataVec))
+    pickleDump(dataVec,filename+"-dataVec")
 
 #############
 # main weibo_train_data
@@ -68,8 +85,11 @@ def Doc2VecTrain(data,filename):
 # data=pickleLoad("weibo_train_data-doc-list")
 # cut_sentence(data,"weibo_train_data")
 
-# dataL=pickleLoad("weibo_train_data-doc-cut")
-# getTrainSet(dataL,"weibo_train_data")
+dataL=pickleLoad("test-doc-cut")
+getTrainSet(dataL,"test")
 
 trainSet=pickleLoad("test-trainSet")
 Doc2VecTrain(trainSet,"test")
+
+
+inferFromModel(trainSet ,"test")
