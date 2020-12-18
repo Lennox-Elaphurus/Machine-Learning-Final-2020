@@ -52,10 +52,9 @@ def getTrainSet(data,filename):
     data=np.array(data,dtype=object)
     TD=[]
     for i in range(data.shape[0]):
-        TD.append(TaggedDocument(data[i][1],tags=data[i][0]))
+        TD.append(TaggedDocument(data[i][1],tags=[i]))
     # print(TD)
     pickleDump(TD,filename+"-trainSet")
-    pickleDump(data,filename+"-trainSet-ndarray")
 
 def Doc2VecTrain(data,filename):
     # print(data)
@@ -67,13 +66,16 @@ def Doc2VecTrain(data,filename):
 
       # you can continue training with the loaded model!
 
-def inferFromModel(inferSet,filename):
+def inferFromModel(trainSet,filename):
     fname = get_tmpfile(os.getcwd()+"/midData/"+filename+"-doc2vec.model")
     model = Doc2Vec.load(fname)
-    # dataV = model.infer_vector(data[:,1])
-    dataVec = [model.docvecs[z.tags[0]] for z in inferSet]
-    print(len(dataVec))
-    pickleDump(dataVec,filename+"-dataVec")
+    dataVec = [model.docvecs[z.tags[0]] for z in trainSet]
+    print("samples =",len(dataVec),", dimemsion =",dataVec[0].shape[0])
+    # print(dataVec)
+    # pickleDump(dataVec,filename+"-dataVec")
+    np.savetxt(os.getcwd()+"/midData/"+filename+"-docVector.txt",dataVec)
+
+
 
 #############
 # main weibo_train_data
@@ -85,11 +87,11 @@ def inferFromModel(inferSet,filename):
 # data=pickleLoad("weibo_train_data-doc-list")
 # cut_sentence(data,"weibo_train_data")
 
-dataL=pickleLoad("test-doc-cut")
-getTrainSet(dataL,"test")
+# dataL=pickleLoad("weibo_train_data-doc-cut")
+# getTrainSet(dataL,"weibo_train_data")
+#
+trainSet=pickleLoad("weibo_train_data-trainSet")
+# Doc2VecTrain(trainSet,"weibo_train_data")
 
-trainSet=pickleLoad("test-trainSet")
-Doc2VecTrain(trainSet,"test")
 
-
-inferFromModel(trainSet ,"test")
+inferFromModel(trainSet ,"weibo_train_data")
