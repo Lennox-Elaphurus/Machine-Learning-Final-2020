@@ -1,6 +1,9 @@
 import pandas as pd
 import os,pickle
 import numpy as np
+import gensim
+import jieba
+from gensim.models.doc2vec import Doc2Vec
 
 
 # load from pickle file
@@ -21,17 +24,19 @@ def pickleDump(variable,filename):
 
 
 def importTag(filename):
-    tag=np.loadtxt(fname="rawData/"+filename+".txt",dtype=str, usecols=(1,4,5,6),encoding='utf-8')
+    tag=np.loadtxt(fname="rawData/"+filename+".txt",dtype=str,delimiter='\t',comments='\n', usecols=(1,3,4,5),encoding='utf-8')
     print(tag)
     pickleDump(tag,filename+"-tag")
 
 
 def importDoc(filename):
-    doc=np.loadtxt(fname="rawData/"+filename+".txt",dtype=str,encoding='utf-8')
+    doc=np.loadtxt(fname="rawData/"+filename+".txt",delimiter='\t',comments='\n', usecols=(1,6),dtype=str,encoding='utf-8')
     print(doc)
     pickleDump(doc,filename+"-doc")
 
+
 #############
-# main
-# importTag("test")
-importDoc("test")
+# main weibo_train_data
+
+# importTag("weibo_train_data")
+# importDoc("weibo_train_data")
