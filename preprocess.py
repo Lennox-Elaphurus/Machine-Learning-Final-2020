@@ -24,15 +24,15 @@ def pickleDump(variable,filename):
 
 
 def importTag(filename):
-    tag=np.loadtxt(fname="rawData/"+filename+".txt",dtype=str,delimiter='\t',comments='\n', usecols=(1,3,4,5),encoding='utf-8')
+    tag=np.loadtxt(fname="rawData/"+filename+".txt",dtype=str,delimiter='\t',comments='\n', usecols=(3,4,5),encoding='utf-8')
     print(tag)
-    pickleDump(tag,filename+"-tag")
+    pickleDump(tag,filename+"-tag-noMid")
 
 
 def importDoc(filename):
-    doc=np.loadtxt(fname="rawData/"+filename+".txt",delimiter='\t',comments='\n', usecols=(1,6),dtype=str,encoding='utf-8')
+    doc=np.loadtxt(fname="rawData/"+filename+".txt",delimiter='\t',comments='\n', usecols=(6),dtype=str,encoding='utf-8')
     print(doc)
-    pickleDump(doc,filename+"-doc")
+    pickleDump(doc,filename+"-doc-noMid")
 
 def cut_sentence(data):
     stopList=[line[:-1] for line in open("中文停用词表.txt",'r',encoding='utf-8')]
@@ -51,6 +51,6 @@ def cut_sentence(data):
 # importTag("weibo_train_data")
 # importDoc("weibo_train_data")
 
-data=pickleLoad("test-doc")
-cut_sentence(data)
-print(data)
+# data=pickleLoad("test-doc")
+# cut_sentence(data)
+# print(data)
