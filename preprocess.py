@@ -90,8 +90,11 @@ def inferFromModel(trainSet,filename):
 # dataL=pickleLoad("weibo_train_data-doc-cut")
 # getTrainSet(dataL,"weibo_train_data")
 #
-trainSet=pickleLoad("weibo_train_data-trainSet")
+# trainSet=pickleLoad("weibo_train_data-trainSet")
 # Doc2VecTrain(trainSet,"weibo_train_data")
 
+# inferFromModel(trainSet ,"weibo_train_data")
 
-inferFromModel(trainSet ,"weibo_train_data")
+
+testV=np.loadtxt(fname="midData/test-docVector.txt",dtype=float)
+print(testV)
